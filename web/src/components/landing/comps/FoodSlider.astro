@@ -1,0 +1,111 @@
+---
+import Svgg from "~/components/svg/Svgg.astro"
+import { SLIDER_FOOD } from "../../../content"
+const SLIDES = Array.from({ length: 6 }, (_, i) => i)
+---
+
+<div
+  style="--slide-w: clamp(18rem, 25vw, 30rem) "
+  class="gap-lg flex w-full flex-col overflow-clip py-4"
+  data-module="fslider"
+>
+  <!-- slider -->
+  <ul
+    data-slider="wrapper"
+    class="ml-[calc((50vw-var(--slide-w)/2)-2rem)] flex text-[.8em]"
+  >
+    {
+      SLIDER_FOOD.map((slide, i) => (
+        <li
+          class:list={[
+            "relative z-2 flex shrink-0 flex-col gap-2 px-[2rem]",
+            i === 0 && "active",
+          ]}
+        >
+          <div class="flex justify-between px-2">
+            <p data-module="text" data-type="chars" class="tracking-wide">
+              {String(i).padStart(4, "0")}
+            </p>
+            <p
+              data-module="alpha"
+              data-delay=".18"
+              class="font-mono text-sm tracking-widest uppercase"
+            >
+              --
+            </p>
+          </div>
+          <div
+            data-gl
+            class="z-10 aspect-[4/4.5] w-[var(--slide-w)] md:aspect-[4/5.5]"
+          />
+          <div class="flex justify-between px-2">
+            <h2
+              data-module="text"
+              data-type="chars"
+              class="font-semibold tracking-tighter uppercase"
+            >
+              "{slide.copy.name}"
+            </h2>
+            <p data-module="text" data-type="chars" data-delay=".2">
+              {slide.copy.description}
+            </p>
+          </div>
+        </li>
+      ))
+    }
+  </ul>
+
+  <!-- bottom ui -->
+  <div data-no-cursor class="relative flex justify-center -outline-offset-1">
+    <div data-slider="controls" class="flex flex-col gap-2">
+      <ul class="flex gap-[1rem]">
+        {
+          SLIDES.map((slide, i) => (
+            <li
+              data-module="alpha"
+              data-delay={1 + i * 0.2}
+              class:list={i === 0 && "active"}
+            >
+              <button aria-label={`slide number ${slide}`}>
+                <div class="aspect-square size-[.4rem] w-full rounded-full outline outline-white" />
+              </button>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <ul
+      data-slider="arrows"
+      class="bg-red px-gx pointer-events-none absolute inset-0 z-10 flex items-center justify-between gap-12 md:justify-end"
+    >
+      <li data-module="alpha" data-delay=".5">
+        <button class="pointer-events-auto" aria-label="previous slide">
+          <div class="rotate-180">
+            <Svgg name="arrow-r" />
+          </div>
+        </button>
+      </li>
+      <li data-module="alpha" data-delay=".7">
+        <button class="pointer-events-auto" aria-label="next slide">
+          <Svgg name="arrow-r" />
+        </button>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<style>
+  /* .active {
+    outline: 2px solid white;
+  } */
+
+  [data-slider="controls"] button {
+    transition: background-color 0.3s ease-in-out;
+  }
+
+  [data-slider="controls"] .active button {
+    background-color: white;
+    pointer-events: none;
+  }
+</style>

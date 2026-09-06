@@ -1,0 +1,88 @@
+---
+import { version } from "../../../package.json"
+import { LINKS } from "~/content"
+
+import Twitter from "@svg/twitter.astro"
+import Github from "@svg/github.astro"
+
+import HoverUl from "@c/HoverUl.astro"
+import Svgg from "@c/svg/Svgg.astro"
+
+const links = [
+  {
+    label: "EXAMPLES",
+    href: "/examples",
+  },
+  {
+    label: "DOCS",
+    href: LINKS.github,
+    target: "_blank",
+    style: "font-semibold",
+  },
+  {
+    label: "TWITTER",
+    href: LINKS.twitter,
+    icon: "Twitter",
+    target: "_blank",
+  },
+  {
+    label: "GITHUB",
+    href: LINKS.github,
+    icon: "Github",
+    target: "_blank",
+  },
+]
+---
+
+<nav
+  class="px-gx py-gy pointer-events-none fixed top-0 z-10 flex w-full justify-between md:items-start"
+>
+  <a
+    href="/"
+    aria-label="back to homepage"
+    class="pointer-events-auto flex -translate-[.3rem] flex-col"
+  >
+    <div data-module="logo">
+      <Svgg name="logo" class="w-[10rem] md:w-[7rem]" />
+    </div>
+    <p
+      data-module="alpha"
+      class="flex w-[90%] justify-between font-mono text-[.7em] tracking-widest uppercase"
+    >
+      <span>VERSION</span>
+      <span>{version}</span>
+    </p>
+  </a>
+
+  <ul class="flex flex-col items-end gap-2 md:flex-row md:gap-4">
+    {
+      links.map(link => (
+        <li class="relative text-[12px] leading-[1em]">
+          <a
+            href={link.href}
+            class:list={[
+              link.style && link.style,
+              "pointer-events-auto tracking-wide",
+            ]}
+            target={link.target}
+            data-module="alpha"
+          >
+            {!link.icon && <HoverUl text={link.label} />}
+            {link.icon && link.icon === "Twitter" && (
+              <figure data-hover="opacity">
+                <Twitter width="2rem" />
+                <figcaption class="sr-only">{link.label}</figcaption>
+              </figure>
+            )}
+            {link.icon && link.icon === "Github" && (
+              <figure data-hover="opacity">
+                <Github width="2rem" />
+                <figcaption class="sr-only">{link.label}</figcaption>
+              </figure>
+            )}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>

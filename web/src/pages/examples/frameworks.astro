@@ -1,0 +1,36 @@
+---
+import Layout from "~/layouts/Layout.astro"
+import Section from "@c/Section.astro"
+import ExampleHead from "~/components/ExampleHead.astro"
+import ExamplePageHead from "~/components/ExamplePageHead.astro"
+import ReactSlider from "~/components/frameworks/ReactSlider"
+import VueSlider from "~/components/frameworks/VueSlider.vue"
+---
+
+<Layout>
+  <ExamplePageHead
+    title={"Frameworks."}
+    description={"A collection of examples of the slider in action and implementation ideas."}
+  />
+</Layout>
+
+<Section id={"controls"} class="min-h-[80svh] pt-[1rem]">
+  <ExampleHead
+    title={"React"}
+    description={"React implementation of the slider. also creates a useSmooothy hook for comvenience."}
+    features={["react", "infinite", "snap", "framework"]}
+    link={"frameworks.md#react"}
+  />
+
+  <ReactSlider client:load />
+</Section>
+
+<Section id={"controls"} class="min-h-[80svh] pt-[10svh]">
+  <ExampleHead
+    title={"Vue"}
+    description={"Vue implementation. Create a composable to handle the slider instance."}
+    features={["vue", "infinite", "snap", "framework"]}
+    link={"frameworks.md#vue"}
+  />
+  <VueSlider client:load />
+</Section>
