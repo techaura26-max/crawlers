@@ -1,5 +1,9 @@
 export const assets = {
-  model: "/webgl/model.008.glb",
   controller: "/webgl/controller.glb",
+  headphones: "/webgl/Headphones.glb",
+  camera: "/webgl/Camera.glb",
+  robot: "/webgl/Robot.glb",
+  color: "/webgl/Color.glb",
+
   hdr_world: "/webgl/spruit_sunrise_2k.hdr.jpg",
 }

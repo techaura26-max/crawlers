@@ -70,63 +70,57 @@ export const IN_USE = {
 
 export const SLIDER_FOOD = [
   {
-    name: "toast-a",
+    name: "controller",
     rot: [0, 0, 0],
     wiggle: 0.4,
     copy: {
-      name: "Toast",
-      description: "33.23¥",
+      name: "GAME TOOLS",
+      description: "",
     },
-    bg: [0xbf965a, 0x993b8b, 0xb26c52],
+    bg: [0x111111, 0x111111, 0x111111],
   },
+
   {
-    name: "fish-a",
+    name: "headphones",
     rot: [0, 0, 0],
     wiggle: 0.4,
     copy: {
-      name: "Fish but no Head",
-      description: "33.23¥",
+      name: "AUDIO TOOLS",
+      description: "",
     },
-    bg: [0x8daaaf, 0x152a42, 0xc49a62],
+    bg: [0x111111, 0x111111, 0x111111],
   },
+
   {
-    name: "hotdog-a",
+    name: "camera",
     rot: [0, 0, 0],
-    wiggle: 0.65,
+    wiggle: 0.4,
     copy: {
-      name: "Hotdog",
-      description: "33.23¥",
+      name: "IMAGE TOOLS",
+      description: "",
     },
-    bg: [0xcbc06d, 0xad6090, 0xb05f5a],
+    bg: [0x111111, 0x111111, 0x111111],
   },
+
   {
-    name: "ramen-a",
+    name: "robot",
     rot: [0, 0, 0],
-    wiggle: 0.8,
+    wiggle: 0.4,
     copy: {
-      name: "Ramen Bowl",
-      description: "33.23¥",
+      name: "AI TOOLS",
+      description: "",
     },
-    bg: [0xbc995b, 0xa23a1e, 0x504934],
+    bg: [0x111111, 0x111111, 0x111111],
   },
+
   {
-    name: "fungus-a",
+    name: "color",
     rot: [0, 0, 0],
-    wiggle: 0.7,
+    wiggle: 0.4,
     copy: {
-      name: "Just a Fungus",
-      description: "33.23¥",
+      name: "COLOR & DESIGN TOOLS",
+      description: "",
     },
-    bg: [0xae7498, 0x6c537f, 0x72329f],
-  },
-  {
-    name: "lcake-a",
-    rot: [0, 0, 0],
-    wiggle: 0.7,
-    copy: {
-      name: "Cake Slice",
-      description: "33.23¥",
-    },
-    bg: [0xc17d5c, 0xb69e4c, 0xc2b9a7],
+    bg: [0x111111, 0x111111, 0x111111],
   },
 ]

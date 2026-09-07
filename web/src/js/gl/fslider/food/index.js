@@ -42,9 +42,7 @@ export class Food extends Group {
 
   onLoad() {
     this.model.traverse(child => {
-      if (this.index !== 0) {
-       setMaterial(child)
-}     if (child.isSkinnedMesh) {
+      if (child.isSkinnedMesh) {
         child.skeleton.bones.forEach(bone => {
           if (!bone.parent.isBone && !this._root) {
             this._root = bone

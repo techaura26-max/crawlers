@@ -37,45 +37,43 @@ export class Slide extends SliderGroup {
 
     this.bg = new Bg(this.lib)
     this.add(this.bg)
+    this.bg.visible = false
   }
 
 onLoad = () => {
-  let model
+  const modelKeys = [
+    "controller",
+    "headphones",
+    "camera",
+    "robot",
+    "color",
+  ]
 
-  if (this.index === 0) {
-    const source = Gl.scene.assets.controller.clone(true)
+  const modelKey = modelKeys[this.index]
+  const source = Gl.scene.assets[modelKey].clone(true)
 
-    const box = new Box3().setFromObject(source)
-    const size = new Vector3()
-    const center = new Vector3()
+  // قياس المجسم
+  const box = new Box3().setFromObject(source)
+  const size = new Vector3()
+  const center = new Vector3()
 
-    box.getSize(size)
-    box.getCenter(center)
+  box.getSize(size)
+  box.getCenter(center)
 
-    // حط المجسم بالنص
-    source.position.x -= center.x
-    source.position.y -= center.y
-    source.position.z -= center.z
+  // حطه بالنص
+  source.position.x -= center.x
+  source.position.y -= center.y
+  source.position.z -= center.z
 
-    // خليه بحجم مناسب للمشهد
-    const maxSize = Math.max(size.x, size.y, size.z)
-    const scale = 1.2 / maxSize
+  // خلي كل المجسمات تقريبًا بنفس الحجم
+  const maxSize = Math.max(size.x, size.y, size.z)
+  const scale = 1.2 / maxSize
 
-    const wrapper = new Group()
-    wrapper.add(source)
-    wrapper.scale.setScalar(scale)
+  const wrapper = new Group()
+  wrapper.add(source)
+  wrapper.scale.setScalar(scale)
 
-    model = wrapper
-
-    console.log("CONTROLLER SIZE:", size)
-    console.log("CONTROLLER SCALE:", scale)
-  } else {
-    model = Gl.scene.assets.model.children.filter(
-      child => child.name === this.lib.name
-    )[0]
-  }
-
-  this.food = new Food(model, this.index, this.lib)
+  this.food = new Food(wrapper, this.index, this.lib)
   this.add(this.food)
 }
 
