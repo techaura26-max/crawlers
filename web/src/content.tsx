@@ -77,6 +77,20 @@ export const SLIDER_FOOD = [
       name: "GAME TOOLS",
       description: "",
     },
+    tools: [
+      {
+        name: "Gamepad Tester",
+        href: "/tools/gamepad-tester",
+      },
+      {
+        name: "Sensitivity Converter",
+        href: "/tools/sensitivity-converter",
+      },
+      {
+        name: "Controller Deadzone Test",
+        href: "/tools/controller-deadzone-test",
+      },
+    ],
     bg: [0x111111, 0x111111, 0x111111],
   },
 
@@ -88,6 +102,20 @@ export const SLIDER_FOOD = [
       name: "AUDIO TOOLS",
       description: "",
     },
+    tools: [
+      {
+        name: "Audio Converter",
+        href: "/tools/audio-converter",
+      },
+      {
+        name: "Audio Trimmer",
+        href: "/tools/audio-trimmer",
+      },
+      {
+        name: "Volume Booster",
+        href: "/tools/volume-booster",
+      },
+    ],
     bg: [0x111111, 0x111111, 0x111111],
   },
 
@@ -99,6 +127,20 @@ export const SLIDER_FOOD = [
       name: "IMAGE TOOLS",
       description: "",
     },
+    tools: [
+      {
+        name: "Image Converter",
+        href: "/tools/image-converter",
+      },
+      {
+        name: "Image Compressor",
+        href: "/tools/image-compressor",
+      },
+      {
+        name: "Background Remover",
+        href: "/tools/background-remover",
+      },
+    ],
     bg: [0x111111, 0x111111, 0x111111],
   },
 
@@ -110,6 +152,20 @@ export const SLIDER_FOOD = [
       name: "AI TOOLS",
       description: "",
     },
+    tools: [
+      {
+        name: "AI Text Summarizer",
+        href: "/tools/ai-text-summarizer",
+      },
+      {
+        name: "AI Content Rewriter",
+        href: "/tools/ai-content-rewriter",
+      },
+      {
+        name: "AI Prompt Generator",
+        href: "/tools/ai-prompt-generator",
+      },
+    ],
     bg: [0x111111, 0x111111, 0x111111],
   },
 
@@ -121,6 +177,20 @@ export const SLIDER_FOOD = [
       name: "COLOR & DESIGN TOOLS",
       description: "",
     },
+    tools: [
+      {
+        name: "Color Picker",
+        href: "/tools/color-picker",
+      },
+      {
+        name: "Palette Generator",
+        href: "/tools/palette-generator",
+      },
+      {
+        name: "Contrast Checker",
+        href: "/tools/contrast-checker",
+      },
+    ],
     bg: [0x111111, 0x111111, 0x111111],
   },
 ]
