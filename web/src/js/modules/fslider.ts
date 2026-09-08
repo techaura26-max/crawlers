@@ -27,6 +27,8 @@ export class FSlider extends Core {
   #pointerMoved = false
   #pointerStart = { x: 0, y: 0 }
 
+  declare _timeout: ReturnType<typeof setTimeout> | undefined
+
   lspeed = 0
 
   #buttons: HTMLUListElement[]
@@ -63,7 +65,7 @@ export class FSlider extends Core {
     })
 
     this.#arrows.forEach((button, i) => {
-      button.children[0].onclick = () =>
+      ;(button.children[0] as HTMLElement).onclick = () =>
         i === 0 ? this.goToPrev() : this.goToNext()
     })
   }
@@ -227,11 +229,13 @@ export class FSlider extends Core {
     if (Gl.scene && Gl.scene.fslider) {
       Gl.scene.fslider.children.forEach((child, i) => {
         const arr = calculateSlidePosition(i, this)
-        child.onSlide?.(arr)
+        ;(
+          child as typeof child & { onSlide?: (position: number) => void }
+        ).onSlide?.(arr)
       })
     }
 
-    this.#progress.children[0].style.left = `${
+    ;(this.#progress.children[0] as HTMLElement).style.left = `${
       this.lprogress * this.#progress.clientWidth
     }px`
   }

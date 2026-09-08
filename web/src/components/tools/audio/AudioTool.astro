@@ -1,0 +1,11 @@
+---
+import AudioConverter from "./AudioConverter"
+interface Props {
+  from: string
+  to: string
+}
+const { from, to } = Astro.props
+---
+
+<AudioConverter initialFrom={from} initialTo={to} client:load />
+<noscript>Enable JavaScript to convert audio on your device.</noscript>

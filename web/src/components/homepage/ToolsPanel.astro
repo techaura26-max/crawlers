@@ -1,0 +1,73 @@
+---
+import { SLIDER_FOOD } from "../../homepage/categories"
+import { getPanelTools } from "../../tools/registry"
+---
+
+<div id="tools-panel" data-tools-panel class="tools-panel" aria-hidden="true">
+  <button
+    type="button"
+    data-tools-overlay
+    class="tools-overlay"
+    tabindex="-1"
+    aria-label="Close tools panel"></button>
+
+  <aside
+    data-tools-drawer
+    class="tools-drawer"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Tools"
+  >
+    <div class="tools-sheet-handle" aria-hidden="true"></div>
+
+    <header class="tools-panel-header">
+      <p class="tools-panel-label">CRAWLERS / TOOL INDEX</p>
+      <button
+        type="button"
+        data-tools-close
+        class="tools-close"
+        aria-label="Close tools panel"
+      >
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </button>
+    </header>
+
+    <div class="tools-panel-content">
+      {
+        SLIDER_FOOD.map((section, sectionIndex) => (
+          <div data-tools-view data-section-index={sectionIndex} hidden>
+            <p class="tools-section-number">
+              {String(sectionIndex + 1).padStart(2, "0")} / {section.name}
+            </p>
+            <h2
+              id={`tools-panel-title-${sectionIndex}`}
+              class="tools-section-title"
+            >
+              {section.copy.name}
+            </h2>
+
+            {getPanelTools(section.category).length === 0 && (
+              <p class="tools-empty">Tools are on the way.</p>
+            )}
+            <ul class="tools-list">
+              {getPanelTools(section.category).map((tool, toolIndex) => (
+                <li style={`--tool-index: ${toolIndex}`}>
+                  <a href={tool.href} class="tools-link">
+                    <span class="tools-link-number">
+                      {String(toolIndex + 1).padStart(2, "0")}
+                    </span>
+                    <span class="tools-link-name">{tool.name}</span>
+                    <span class="tools-link-arrow" aria-hidden="true">
+                      →
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </aside>
+</div>

@@ -1,19 +1,19 @@
 // @ts-check
 import { defineConfig } from "astro/config"
-import { qrcode } from "vite-plugin-qrcode"
 import glsl from "vite-plugin-glsl"
 
 import tailwindcss from "@tailwindcss/vite"
 import react from "@astrojs/react"
-import vue from "@astrojs/vue"
 
 import sitemap from "@astrojs/sitemap"
 
 export default defineConfig({
   vite: {
+    server: { allowedHosts: ["terminal.local"] },
+    optimizeDeps: { exclude: ["@ffmpeg/ffmpeg", "@ffmpeg/util"] },
+    worker: { format: "es" },
     plugins: [
       tailwindcss(),
-      qrcode(),
       glsl({
         include: [
           "**/*.glsl",
@@ -36,6 +36,7 @@ export default defineConfig({
   devToolbar: {
     enabled: false,
   },
-  site: "https://smooothy.federic.ooo",
-  integrations: [react(), vue(), sitemap({})],
+  // Set SITE_URL to the production origin to generate canonical URLs and a sitemap.
+  site: process.env.SITE_URL,
+  integrations: [react(), ...(process.env.SITE_URL ? [sitemap()] : [])],
 })

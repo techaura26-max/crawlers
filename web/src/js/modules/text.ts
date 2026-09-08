@@ -5,11 +5,10 @@ import { computeParams } from "./_/index"
 const DEFAULT = "words"
 
 const split = (element: HTMLElement) => {
-  const type = element.dataset.type || DEFAULT
+  const type = (element.dataset.type || DEFAULT) as "words" | "chars" | "lines"
   const split = new SplitText(element, { type })
-  element.setAttribute("aria-label", split.originals[0])
-  split.result = split[type]
-  return split
+  element.setAttribute("aria-label", element.textContent || "")
+  return split[type]
 }
 
 // //////////////////////////////////////////
@@ -18,7 +17,7 @@ export class Text extends Observe {
   #anim: any
   private split: any
 
-  a = {
+  a: gsap.TweenVars = {
     duration: 1,
     delay: 0.2 + Math.random() * 0.2,
     autoAlpha: 1,
@@ -40,7 +39,7 @@ export class Text extends Observe {
   create() {
     if (reduced) return
 
-    this.split = split(this.element).result
+    this.split = split(this.element)
     computeParams(this.element, this.a)
     this.element.style.visibility = "visible"
   }

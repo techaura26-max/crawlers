@@ -1,0 +1,21 @@
+---
+import type { AstroComponentFactory } from "astro/runtime/server/index.js"
+import ToolLayout from "../layouts/ToolLayout.astro"
+import { toolTitle, type Tool } from "../tools/registry"
+
+interface Props {
+  tool: Tool
+}
+const { tool } = Astro.props
+const components = import.meta.glob<{ default: AstroComponentFactory }>(
+  "./tools/**/*.astro"
+)
+const load = components[`./tools/${tool.component}.astro`]
+if (!load)
+  throw new Error(`Missing component for ${tool.id}: ${tool.component}.astro`)
+const { default: Component } = await load()
+---
+
+<ToolLayout title={toolTitle(tool)} description={tool.description}>
+  <Component {...tool.props} />
+</ToolLayout>

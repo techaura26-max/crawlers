@@ -2,7 +2,7 @@
   "name": "smooothy",
   "author": "vallafederico",
   "version": "0.0.35",
-  "description": "",
+  "description": "Crawlers Tools Hub and its preserved slider package",
   "type": "module",
   "main": "index.js",
   "types": "./dist/index.d.ts",
@@ -15,12 +15,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vallafederico/smooothy.git"
+    "url": "git+https://github.com/techaura26-max/crawlers.git"
   },
   "bugs": {
-    "url": "https://github.com/vallafederico/smooothy/issues"
+    "url": "https://github.com/techaura26-max/crawlers/issues"
   },
-  "homepage": "https://github.com/vallafederico/smooothy#readme",
   "keywords": [
     "slider",
     "smooth",
@@ -37,13 +36,14 @@
     "build:package": "bun run bin/build.ts",
     "build:web": "cd web && pnpm build",
     "test:build": "bun run bin/test-build.ts",
-    "dev": "pnpm run -w --parallel /^dev:.*/",
+    "dev": "node web/node_modules/astro/astro.js dev --root web",
     "dev:web": "cd web && pnpm dev",
     "dev:package": "bun run bin/dev.ts",
     "pub": "npm version patch && pnpm run build:package && npm publish",
     "release:patch": "npm version patch && pnpm run build:package && npm publish",
     "release:minor": "npm version minor && pnpm run build:package && npm publish",
-    "release:major": "npm version major && pnpm run build:package && npm publish"
+    "release:major": "npm version major && pnpm run build:package && npm publish",
+    "check": "tsc --noEmit && pnpm --dir web check"
   },
   "files": [
     "dist/",
@@ -55,7 +55,10 @@
     "@types/virtual-scroll": "^2.0.3",
     "bun": "^1.2.4",
     "bun-plugin-dts": "^0.3.0",
-    "esbuild": "^0.25.0"
+    "esbuild": "^0.25.0",
+    "typescript": "~6.0.2",
+    "@types/bun": "^1.2.4",
+    "@types/node": "^22.15.17"
   },
   "dependencies": {
     "virtual-scroll": "^2.2.1"

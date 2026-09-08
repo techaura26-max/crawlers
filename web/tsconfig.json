@@ -1,19 +1,24 @@
 {
+  "extends": "astro/tsconfigs/base",
   "include": [".astro/types.d.ts", "**/*"],
   "compilerOptions": {
     "target": "ES2022",
     "module": "ESNext",
-    "baseUrl": ".",
     "paths": {
-      "~/*": ["src/*"],
-      "@c/*": ["src/components/*"],
-      "@js/*": ["src/js/*"],
-      "@svg/*": ["src/components/svg/*"],
-      "@package/*": ["package/*"],
-      "@slider/*": ["src/wip/slider/*"]
+      "~/*": ["./src/*"],
+      "@c/*": ["./src/components/*"],
+      "@js/*": ["./src/js/*"],
+      "@svg/*": ["./src/components/svg/*"],
+      "@package/*": ["../package/*"],
+      "@slider/*": ["../package/src/*"]
     },
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "jsxImportSource": "react",
-    "outDir": "./dist"
-  }
+    "outDir": "./dist",
+    "rootDir": ".",
+    "noEmit": true,
+    "strict": false,
+    "types": ["astro/client", "node"]
+  },
+  "exclude": ["dist", "node_modules"]
 }

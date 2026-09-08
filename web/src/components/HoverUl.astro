@@ -1,4 +1,7 @@
 ---
+interface Props {
+  text: string
+}
 const { text } = Astro.props
 const letters = text.split("").map(char => (char === " " ? "\u00A0" : char))
 ---
@@ -21,7 +24,7 @@ const letters = text.split("").map(char => (char === " " ? "\u00A0" : char))
   </span>
   <span
     aria-hidden="true"
-    class="absolute top-[100%] left-0 block h-full w-full"
+    class="absolute left-0 top-[100%] block h-full w-full"
   >
     {
       letters.map((letter, i) => (

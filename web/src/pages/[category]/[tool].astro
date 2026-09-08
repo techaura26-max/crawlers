@@ -1,0 +1,19 @@
+---
+import ToolPage from "../../components/ToolPage.astro"
+import { tools, type Tool } from "../../tools/registry"
+
+export function getStaticPaths() {
+  return tools
+    .filter(tool => !tool.categoryIndex)
+    .map(tool => ({
+      params: { category: tool.category, tool: tool.id },
+      props: { tool },
+    }))
+}
+interface Props {
+  tool: Tool
+}
+const { tool } = Astro.props
+---
+
+<ToolPage tool={tool} />

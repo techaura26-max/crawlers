@@ -1,0 +1,42 @@
+---
+import ToolPage from "../../components/ToolPage.astro"
+import ToolLayout from "../../layouts/ToolLayout.astro"
+import { categories, type CategoryId } from "../../tools/categories"
+import { getToolsByCategory, type Tool } from "../../tools/registry"
+
+export function getStaticPaths() {
+  return categories
+    .filter(category => getToolsByCategory(category.id).length)
+    .map(category => ({
+      params: { category: category.id },
+      props: { category, tools: getToolsByCategory(category.id) },
+    }))
+}
+interface Props {
+  category: { id: CategoryId; name: string }
+  tools: Tool[]
+}
+const { category, tools } = Astro.props
+const indexTool = tools.find(tool => tool.categoryIndex)
+---
+
+{
+  indexTool ? (
+    <ToolPage tool={indexTool} />
+  ) : (
+    <ToolLayout
+      title={`${category.name} | Crawlers`}
+      description={`Explore ${category.name.toLowerCase()} on Crawlers.`}
+    >
+      <h1>{category.name}</h1>
+      <ul class="category-tools">
+        {tools.map(tool => (
+          <li>
+            <a href={tool.href}>{tool.name} →</a>
+            <p>{tool.description}</p>
+          </li>
+        ))}
+      </ul>
+    </ToolLayout>
+  )
+}

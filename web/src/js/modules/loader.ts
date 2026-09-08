@@ -3,6 +3,7 @@ import gsap from "../gsap"
 
 export class Loader {
   element: HTMLDivElement
+  svg: HTMLElement | SVGElement
   circle: SVGElement
   #onLoad = hey.on("START", () => this.animateIn())
 

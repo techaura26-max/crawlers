@@ -36,7 +36,6 @@ async function run() {
         format: "iife",
         outdir: "./dist",
         naming: "smooothy.min.js",
-        globalName: "Smooothy", // (*) DOESNT WORK
         target: "browser",
         minify: true,
         sourcemap: "none",

@@ -19,7 +19,7 @@ type CallbackStore = {
 // Config types
 type EventConfig = {
   name: string
-  handler: (self: Mouse) => (...args: any[]) => void
+  handler: (self: typeof Mouse) => (...args: any[]) => void
 }
 type Config = {
   damp: number
@@ -40,17 +40,20 @@ const CONFIG: Config = {
   dampFunc: damp,
   dampDecay: 1.2,
   events: [
-    { name: "mousemove", handler: (self: Mouse) => self.handleMove.bind(self) },
+    {
+      name: "mousemove",
+      handler: (self: typeof Mouse) => self.handleMove.bind(self),
+    },
     {
       name: "blur",
-      handler: (self: Mouse) => () => {
+      handler: (self: typeof Mouse) => () => {
         self.in = false
         self._callbacks.blur.forEach(cb => cb())
       },
     },
     {
       name: "mouseenter",
-      handler: (self: Mouse) => () => {
+      handler: (self: typeof Mouse) => () => {
         self.in = true
         self._callbacks.enter.forEach(cb => cb())
         document.body.classList.remove("mouse-out")
@@ -58,7 +61,7 @@ const CONFIG: Config = {
     },
     {
       name: "mouseleave",
-      handler: (self: Mouse) => () => {
+      handler: (self: typeof Mouse) => () => {
         self.in = false
         self._callbacks.leave.forEach(cb => cb())
         document.body.classList.remove("mouse-down")
@@ -67,14 +70,14 @@ const CONFIG: Config = {
     },
     {
       name: "visibilitychange",
-      handler: (self: Mouse) => () => {
+      handler: (self: typeof Mouse) => () => {
         self.in = !document.hidden
         self._callbacks[document.hidden ? "leave" : "enter"].forEach(cb => cb())
       },
     },
     {
       name: "mousedown",
-      handler: (self: Mouse) => () => {
+      handler: (self: typeof Mouse) => () => {
         self.down = true
         // console.log("mousedown")
         document.body.classList.add("mouse-down")
@@ -82,7 +85,7 @@ const CONFIG: Config = {
     },
     {
       name: "mouseup",
-      handler: (self: Mouse) => () => {
+      handler: (self: typeof Mouse) => () => {
         self.down = false
         // console.log("mouseup")
         document.body.classList.remove("mouse-down")
@@ -92,7 +95,7 @@ const CONFIG: Config = {
 }
 
 export class Mouse {
-  private static _callbacks: CallbackStore = {
+  static readonly _callbacks: CallbackStore = {
     enter: new Map(),
     leave: new Map(),
     blur: new Map(),

@@ -8,7 +8,7 @@ import { Observe } from "../../modules/_/observe"
 import { Bg } from "./bg/"
 import { Food } from "./food"
 
-import { SLIDER_FOOD } from "../../../content"
+import { SLIDER_FOOD } from "../../../homepage/categories"
 
 import { Box3, Vector3, Group } from "three"
 
