@@ -9,8 +9,11 @@ const SLIDES = Array.from({ length: SLIDER_FOOD.length }, (_, i) => i)
 ---
 
 <section
-  style="--slide-w: clamp(18rem, 25vw, 30rem)"
-  class="gap-lg flex w-full flex-col py-4"
+  class="gap-lg relative flex h-full w-full flex-col justify-center py-4
+         [--slide-w:72vw]
+         sm:[--slide-w:60vw]
+         md:[--slide-w:44vw]
+         lg:[--slide-w:clamp(18rem,25vw,30rem)]"
   data-module="fslider"
   data-panel-open="false"
 >
@@ -24,7 +27,7 @@ const SLIDES = Array.from({ length: SLIDER_FOOD.length }, (_, i) => i)
         SLIDER_FOOD.map((slide, i) => (
           <li
             class:list={[
-              "z-2 relative flex shrink-0 flex-col gap-2 px-[2rem]",
+              "z-2 relative flex shrink-0 flex-col gap-2 px-[0.75rem] sm:px-[1.25rem] lg:px-[2rem]",
               i === 0 && "active",
             ]}
           >
@@ -61,8 +64,11 @@ const SLIDES = Array.from({ length: SLIDER_FOOD.length }, (_, i) => i)
     </ul>
   </div>
 
-  <!-- bottom ui -->
-  <div data-no-cursor class="relative flex justify-center -outline-offset-1">
+<!-- bottom ui -->
+<div
+  data-no-cursor
+  class="fixed inset-x-0 bottom-[max(1rem,env(safe-area-inset-bottom))] z-30 flex justify-center -outline-offset-1"
+>
     <div data-slider="controls" class="flex flex-col gap-2">
       <ul class="flex gap-[1rem]">
         {
@@ -82,9 +88,9 @@ const SLIDES = Array.from({ length: SLIDER_FOOD.length }, (_, i) => i)
     </div>
 
     <ul
-      data-slider="arrows"
-      class="bg-red px-gx pointer-events-none absolute inset-0 z-10 flex items-center justify-between gap-12 md:justify-end"
-    >
+  data-slider="arrows"
+  class="px-gx pointer-events-none absolute inset-0 z-10 flex items-center justify-between gap-12"
+>
       <li data-module="alpha" data-delay=".5">
         <button class="pointer-events-auto" aria-label="previous slide">
           <div class="rotate-180">

@@ -21,19 +21,4 @@ const links = categories.filter(
       <Svgg name="logo" class="w-[10rem] md:w-[7rem]" />
     </div>
   </a>
-  <ul class="flex flex-col items-end gap-2 md:flex-row md:gap-4">
-    {
-      links.map(category => (
-        <li class="relative text-[12px] leading-[1em]">
-          <a
-            href={`/${category.id}/`}
-            class="pointer-events-auto tracking-wide"
-            data-module="alpha"
-          >
-            <HoverUl text={category.name} />
-          </a>
-        </li>
-      ))
-    }
-  </ul>
 </nav>

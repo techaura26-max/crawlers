@@ -2,7 +2,7 @@ import {
   audioFormats,
   defaultConversion,
   outputFormats,
-} from "../components/tools/audio/audioData"
+} from "../components/tools/audio/audio_converter/audioData"
 import type { CategoryId } from "./categories"
 
 export interface Tool {
@@ -34,7 +34,7 @@ const entries: ToolEntry[] = [
     name: "Audio Converter",
     category: "audio",
     description: "Convert audio privately in your browser.",
-    component: "audio/AudioTool",
+    component: "audio/audio_converter/AudioTool",
     props: defaultConversion,
     categoryIndex: true,
   },
@@ -46,7 +46,7 @@ const entries: ToolEntry[] = [
         name: `${from.ext} to ${to.ext}`,
         category: "audio" as const,
         description: `Convert ${from.ext} audio to ${to.ext} for free, directly on your device.`,
-        component: "audio/AudioTool",
+        component: "audio/audio_converter/AudioTool",
         props: { from: from.id, to: to.id },
         panel: popularConversions.includes(`${from.id}-to-${to.id}`),
       }))

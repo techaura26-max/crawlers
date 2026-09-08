@@ -10,7 +10,7 @@ import {
   getAudioConversion,
   getToolByPath,
   toolTitle,
-} from "../../../tools/registry"
+} from "../../../../tools/registry"
 import type { AudioEngine } from "./audioEngine"
 import "./audio-converter.css"
 

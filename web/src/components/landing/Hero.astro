@@ -4,9 +4,10 @@ import Loader from "@c/landing/Loader.astro"
 ---
 
 <header
-  class="py-sm relative flex min-h-[100svh] flex-col items-center justify-between"
+  class="py-sm relative flex min-h-[100svh] flex-col items-center overflow-hidden"
 >
-  <div class="px-gx w-full pt-2">
+  <!-- top content -->
+  <div class="px-gx absolute inset-x-0 top-0 z-10 w-full pt-2">
     <div class="md:px-grid-3 pt-[5rem] md:pt-0">
       <h1
         data-module="text"
@@ -17,6 +18,10 @@ import Loader from "@c/landing/Loader.astro"
     </div>
   </div>
 
-  <FoodSlider />
+  <!-- centered slider -->
+  <div class="flex w-full flex-1 items-center justify-center">
+    <FoodSlider />
+  </div>
+
   <Loader />
 </header>

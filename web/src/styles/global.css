@@ -22,12 +22,12 @@ body {
 }
 
 * {
-  -ms-overflow-style: none; /* Internet Explorer and Edge */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 *::-webkit-scrollbar {
-  display: none; /* Chrome, Safari and Opera */
+  display: none;
 }
 
 html,
@@ -37,11 +37,11 @@ h1,
 h2,
 h3,
 h4 {
-  user-select: none; /* supported by Chrome and Opera */
-  -webkit-user-select: none; /* Safari */
-  -khtml-user-select: none; /* Konqueror HTML */
-  -moz-user-select: none; /* Firefox */
-  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 [data-selectable] {
@@ -69,7 +69,6 @@ h4 {
   --spacing-3xl: 5rem;
   --spacing-nav-height: 8em;
 
-  /* --color-*: initial; */
   --color-gray-300: oklch(0.872 0 0);
   --color-gray-400: oklch(0.707 0 0);
   --color-gray-500: oklch(0.551 0 0);
@@ -92,48 +91,205 @@ h4 {
   --spacing-ex-gx: 10rem;
 }
 
-/* global  */
+/* ------------------------------------------------ */
+/* GLOBAL */
+/* ------------------------------------------------ */
+
+html {
+  /*
+    This value is controlled by the slider.
+  */
+  --grid-drag-x: 0px;
+
+  background: #070707;
+}
+
 body {
   font-size: 14px;
   font-family: "Geist", sans-serif;
-  /* font-optical-sizing: auto; */
 
   font-weight: 400;
   font-style: normal;
 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
   text-rendering: optimizeLegibility;
+
   font-feature-settings:
     "kern" 1,
     "liga" 1,
     "calt" 1;
+
   font-synthesis: none;
 
-  background: #000;
+  position: relative;
+  isolation: isolate;
+
+  background: transparent;
+
   color: #fff;
 }
+
+/* ------------------------------------------------ */
+/* INFINITE 3D GRID */
+/* ------------------------------------------------ */
+
+body::before {
+  content: "";
+
+  position: fixed;
+
+  width: 200vw;
+  height: 170vh;
+
+  left: -50vw;
+  top: 34vh;
+
+  pointer-events: none;
+
+  z-index: -2;
+
+  background-image:
+    linear-gradient(
+      rgba(255, 255, 255, 0.075) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.075) 1px,
+      transparent 1px
+    );
+
+  background-size: 58px 58px;
+
+  /*
+    Slider controls the horizontal position.
+  */
+  background-position:
+    var(--grid-drag-x) 0,
+    var(--grid-drag-x) 0;
+
+  transform-origin: center top;
+
+  transform:
+    perspective(700px)
+    rotateX(63deg)
+    translateY(-8%);
+
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 0, 0, 0.4) 8%,
+    #000 24%,
+    #000 72%,
+    transparent 100%
+  );
+
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 0, 0, 0.4) 8%,
+    #000 24%,
+    #000 72%,
+    transparent 100%
+  );
+
+  /*
+    Keep the slow forward movement too.
+  */
+  animation: infinite-grid-move 12s linear infinite;
+}
+
+/* ------------------------------------------------ */
+/* ATMOSPHERE / VIGNETTE */
+/* ------------------------------------------------ */
+
+body::after {
+  content: "";
+
+  position: fixed;
+  inset: 0;
+
+  pointer-events: none;
+
+  z-index: -1;
+
+  background:
+    radial-gradient(
+      ellipse at 50% 44%,
+      rgba(255, 255, 255, 0.035) 0%,
+      transparent 38%
+    ),
+
+    radial-gradient(
+      ellipse at center,
+      transparent 35%,
+      rgba(0, 0, 0, 0.18) 62%,
+      rgba(0, 0, 0, 0.72) 100%
+    ),
+
+    linear-gradient(
+      to bottom,
+      #070707 0%,
+      rgba(7, 7, 7, 0.95) 20%,
+      rgba(7, 7, 7, 0.35) 50%,
+      rgba(7, 7, 7, 0.15) 72%,
+      #070707 100%
+    );
+}
+
+/* ------------------------------------------------ */
+/* GRID ANIMATION */
+/* ------------------------------------------------ */
+
+@keyframes infinite-grid-move {
+  from {
+    background-position:
+      var(--grid-drag-x) 0,
+      var(--grid-drag-x) 0;
+  }
+
+  to {
+    background-position:
+      var(--grid-drag-x) 58px,
+      var(--grid-drag-x) 58px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::before {
+    animation: none;
+  }
+}
+
+/* ------------------------------------------------ */
 
 .tr-s {
   letter-spacing: -0.08em;
 }
 
 /* fonts */
+
 .mono {
   @apply font-mono text-[.6rem] tracking-[.3em] uppercase;
 }
 
 /* svg */
+
 svg {
   min-width: 1.2rem;
   min-height: 1.2rem;
 }
 
 /* links */
-/* a:hover {
+
+/*
+a:hover {
   opacity: 0.7;
   transition: opacity 0.3s ease;
-} */
+}
+*/
 
 .sr-only {
   position: absolute;

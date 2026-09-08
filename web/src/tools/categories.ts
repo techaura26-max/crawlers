@@ -3,7 +3,7 @@ export const categories = [
   { id: "audio", name: "AUDIO TOOLS" },
   { id: "image", name: "IMAGE TOOLS" },
   { id: "ai", name: "AI TOOLS" },
-  { id: "design", name: "COLOR & DESIGN TOOLS" },
+  { id: "design", name: "COLOR TOOLS" },
 ] as const
 
 export type CategoryId = (typeof categories)[number]["id"]
