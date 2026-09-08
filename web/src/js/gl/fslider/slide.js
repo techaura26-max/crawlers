@@ -140,28 +140,28 @@ onLoad = () => {
   }
 
   #funkytl = null
-  animateCentral = (baseDuration = 2.2) => {
-    this.#funkytl = gsap.timeline({
-      yoyo: true,
-      repeat: 1,
-    })
+animateCentral = (baseDuration = 2.2) => {
+  if (!this.food) return
 
-    this.#funkytl.to(this.food.a, {
-      rz: this.food.a.rz + Math.PI * 2 * (Math.random() > 0.5 ? -1 : 1),
-      duration: baseDuration,
-      ease: "elastic.inOut(1,.5)",
-    })
-
-    this.#funkytl.to(
-      this.food.a,
-      {
-        ry: Math.random() - 0.5,
-        duration: baseDuration,
-        ease: "elastic.inOut(1,.5)",
-      },
-      "<"
-    )
+  if (this.#funkytl) {
+    this.#funkytl.kill()
   }
+
+  this.food.a.ry = 0
+
+  const direction = Math.random() > 0.5 ? -1 : 1
+
+  this.#funkytl = gsap.timeline({
+    yoyo: true,
+    repeat: 1,
+  })
+
+  this.#funkytl.to(this.food.a, {
+    rz: this.food.a.rz + Math.PI * 2 * direction,
+    duration: baseDuration,
+    ease: "elastic.inOut(1,.5)",
+  })
+}
 
   invalidate = () => {
     if (this.#funkytl) {
