@@ -11,103 +11,62 @@ import { Food } from "./food"
 
 import { SLIDER_FOOD } from "../../../homepage/categories"
 
-import {
-  Box3,
-  Vector3,
-  Group,
-} from "three"
+import { Box3, Vector3, Group } from "three"
 
 export class Slide extends SliderGroup {
   #visible = true
+  modelWrapper = null
+  modelMaxSize = 1
 
-  #raf = Raf.subscribe(t =>
-    this.raf(t)
+  #raf = Raf.subscribe(t => this.raf(t))
+
+  #observe = new Observe(this.element, {
+    callback: ({ isIn }) => {
+      this.handleInView(isIn)
+    },
+  })
+
+  #onLoad = hey.on("WEBGL_LOADED", () => this.onLoad())
+
+  #onStart = hey.on("START", () => this.animateIn())
+
+  #onSlideSettle = hey.on("FSLIDE_CHANGE", ([current, old]) =>
+    this.onSettle(current, old)
   )
 
-  #observe = new Observe(
-    this.element,
-    {
-      callback: ({ isIn }) => {
-        this.handleInView(isIn)
-      },
-    }
-  )
-
-  #onLoad = hey.on(
-    "WEBGL_LOADED",
-    () => this.onLoad()
-  )
-
-  #onStart = hey.on(
-    "START",
-    () => this.animateIn()
-  )
-
-  #onSlideSettle = hey.on(
-    "FSLIDE_CHANGE",
-    ([current, old]) =>
-      this.onSettle(
-        current,
-        old
-      )
-  )
-
-  constructor(
-    element,
-    { index }
-  ) {
+  constructor(element, { index }) {
     super(element, {
       index,
     })
 
-    this.lib =
-      SLIDER_FOOD[index]
+    this.lib = SLIDER_FOOD[index]
 
-    this.element =
-      element
+    this.element = element
 
-    this.index =
-      index
+    this.index = index
 
-    this.bg =
-      new Bg(this.lib)
+    this.bg = new Bg(this.lib)
 
     this.add(this.bg)
 
-    this.bg.visible =
-      false
+    this.bg.visible = false
   }
 
   onLoad = () => {
-    const modelKeys = [
-      "controller",
-      "headphones",
-      "camera",
-      "robot",
-      "color",
-    ]
+    const modelKeys = ["controller", "headphones", "camera", "robot", "color"]
 
-    const modelKey =
-      modelKeys[this.index]
+    const modelKey = modelKeys[this.index]
 
-    const source =
-      Gl.scene.assets[
-        modelKey
-      ].clone(true)
+    const source = Gl.scene.assets[modelKey].clone(true)
 
     /*
      * Measure model.
      */
-    const box =
-      new Box3().setFromObject(
-        source
-      )
+    const box = new Box3().setFromObject(source)
 
-    const size =
-      new Vector3()
+    const size = new Vector3()
 
-    const center =
-      new Vector3()
+    const center = new Vector3()
 
     box.getSize(size)
     box.getCenter(center)
@@ -115,83 +74,55 @@ export class Slide extends SliderGroup {
     /*
      * Center model around its real bounds.
      */
-    source.position.x -=
-      center.x
+    source.position.x -= center.x
 
-    source.position.y -=
-      center.y
+    source.position.y -= center.y
 
-    source.position.z -=
-      center.z
+    source.position.z -= center.z
 
-    /*
-     * Normalize model sizes.
-     */
-const maxSize = Math.max(size.x, size.y, size.z)
+    /* Normalize every GLB to the same visual footprint. */
+    this.modelMaxSize = Math.max(size.x, size.y, size.z)
 
-/*
- * Responsive model size
- *
- * Desktop keeps the original size.
- * Tablets and phones get progressively
- * smaller models so they never overlap
- * or leave the viewport.
- */
-const viewportWidth = window.innerWidth
+    this.modelWrapper = new Group()
+    this.modelWrapper.add(source)
+    this.updateModelScale()
 
-let targetSize = 1.2
+    this.food = new Food(this.modelWrapper, this.index, this.lib)
 
-if (viewportWidth <= 480) {
-  targetSize = 0.76
-} else if (viewportWidth <= 640) {
-  targetSize = 0.84
-} else if (viewportWidth <= 900) {
-  targetSize = 0.92
-} else if (viewportWidth <= 1100) {
-  targetSize = 1.0
-}
-
-const scale = targetSize / maxSize
-
-const wrapper = new Group()
-wrapper.add(source)
-wrapper.scale.setScalar(scale)
-
-    this.food =
-      new Food(
-        wrapper,
-        this.index,
-        this.lib
-      )
-
-    this.add(
-      this.food
-    )
+    this.add(this.food)
   }
 
   resize() {
-    this.bg.scale.set(
-      this.bounds.width,
-      this.bounds.height,
-      1
-    )
+    this.bg.scale.set(this.bounds.width, this.bounds.height, 1)
+
+    this.updateModelScale()
+  }
+
+  getTargetSize = () => {
+    const viewportWidth = window.innerWidth
+
+    if (viewportWidth <= 480) return 0.76
+    if (viewportWidth <= 640) return 0.84
+    if (viewportWidth <= 900) return 0.92
+    if (viewportWidth <= 1100) return 1
+    return 1.2
+  }
+
+  updateModelScale = () => {
+    if (!this.modelWrapper) return
+
+    const scale = this.getTargetSize() / this.modelMaxSize
+
+    this.modelWrapper.scale.setScalar(scale)
   }
 
   raf = ({ time }) => {
-    this.bg.speed =
-      hey.FSLIDER.lspeed
+    this.bg.speed = hey.FSLIDER.lspeed
 
-    this.bg.time =
-      time * 0.4
+    this.bg.time = time * 0.4
 
     if (this.food) {
-      this.food.onRaf(
-        time,
-        hey.FSLIDER
-          .parallaxValues[
-          this.index
-        ]
-      )
+      this.food.onRaf(time, hey.FSLIDER.parallaxValues[this.index])
     }
   }
 
@@ -203,39 +134,29 @@ wrapper.scale.setScalar(scale)
 
   handleInView = isIn => {
     if (isIn) {
-      this.#visible =
-        true
+      this.#visible = true
 
-      this.bg.view =
-        1
+      this.bg.view = 1
     } else {
-      this.#visible =
-        false
+      this.#visible = false
 
-      this.bg.view =
-        0
+      this.bg.view = 0
 
       if (this.#funkytl) {
         this.#funkytl.kill()
 
-        this.food.a.ry =
-          0
+        this.food.a.ry = 0
 
-        this.food.a.rz =
-          0
+        this.food.a.rz = 0
 
-        this.food.a.centerScale =
-          0
+        this.food.a.centerScale = 0
 
-        this.food.a.centerLift =
-          0
+        this.food.a.centerLift = 0
       }
     }
 
     if (this.food) {
-      this.food.handleInView(
-        isIn
-      )
+      this.food.handleInView(isIn)
     }
   }
 
@@ -245,26 +166,13 @@ wrapper.scale.setScalar(scale)
    * ------------------------------------------------
    */
 
-  onSettle = (
-    current,
-    old
-  ) => {
-    if (
-      current === old
-    )
-      return
+  onSettle = (current, old) => {
+    if (current === old) return
 
-    if (
-      this.index ===
-      current
-    ) {
-      this.bg.center =
-        1
-    } else if (
-      this.index === old
-    ) {
-      this.bg.center =
-        0
+    if (this.index === current) {
+      this.bg.center = 1
+    } else if (this.index === old) {
+      this.bg.center = 0
     }
   }
 
@@ -275,48 +183,27 @@ wrapper.scale.setScalar(scale)
    */
 
   animateIn = () => {
-    gsap.to(
-      this.food.a,
-      {
-        rotation: 0,
+    gsap.to(this.food.a, {
+      rotation: 0,
 
-        startY: 0,
+      startY: 0,
 
-        duration: 2.4,
+      duration: 2.4,
 
-        ease:
-          "expo.out",
+      ease: "expo.out",
 
-        delay: () =>
-          0.35 +
-          [0, 1, 2, 3, 4][
-            this.index
-          ] *
-            0.16,
-      }
-    )
+      delay: () => 0.35 + [0, 1, 2, 3, 4][this.index] * 0.16,
+    })
 
-    gsap.to(
-      this.bg
-        .material
-        .uniforms
-        .u_a_in,
-      {
-        value: 1,
+    gsap.to(this.bg.material.uniforms.u_a_in, {
+      value: 1,
 
-        duration: 1.4,
+      duration: 1.4,
 
-        ease:
-          "expo.out",
+      ease: "expo.out",
 
-        delay: () =>
-          0.6 +
-          [0, 1, 2, 3, 4][
-            this.index
-          ] *
-            0.1,
-      }
-    )
+      delay: () => 0.6 + [0, 1, 2, 3, 4][this.index] * 0.1,
+    })
   }
 
   /*
@@ -339,97 +226,65 @@ wrapper.scale.setScalar(scale)
 
   #funkytl = null
 
-  animateCentral = (
-    baseDuration = 2.2
-  ) => {
-    if (!this.food)
-      return
+  animateCentral = (baseDuration = 2.2) => {
+    if (!this.food) return
 
-    if (
-      this.#funkytl
-    ) {
+    if (this.#funkytl) {
       this.#funkytl.kill()
     }
 
     /*
      * Always start from a clean center state.
      */
-    this.food.a.ry =
-      0
+    this.food.a.ry = 0
 
-    this.food.a.rz =
-      0
+    this.food.a.rz = 0
 
-    this.food.a.centerScale =
-      0
+    this.food.a.centerScale = 0
 
-    this.food.a.centerLift =
-      0
+    this.food.a.centerLift = 0
 
     /*
      * Alternate direction slightly so
      * the animation doesn't feel robotic.
      */
-    const direction =
-      Math.random() >
-      0.5
-        ? -1
-        : 1
+    const direction = Math.random() > 0.5 ? -1 : 1
 
-    this.#funkytl =
-      gsap.timeline()
+    this.#funkytl = gsap.timeline()
 
     /*
      * Small premium "breath".
      */
-    this.#funkytl.to(
-      this.food.a,
-      {
-        centerScale:
-          0.045,
+    this.#funkytl.to(this.food.a, {
+      centerScale: 0.045,
 
-        centerLift:
-          0.035,
+      centerLift: 0.035,
 
-        ry:
-          direction *
-          0.045,
+      ry: direction * 0.045,
 
-        rz:
-          direction *
-          -0.018,
+      rz: direction * -0.018,
 
-        duration:
-          0.42,
+      duration: 0.42,
 
-        ease:
-          "power2.out",
-      }
-    )
+      ease: "power2.out",
+    })
 
     /*
      * Smooth spring-like return.
      */
-    this.#funkytl.to(
-      this.food.a,
-      {
-        centerScale:
-          0,
+    this.#funkytl.to(this.food.a, {
+      centerScale: 0,
 
-        centerLift:
-          0,
+      centerLift: 0,
 
-        ry: 0,
+      ry: 0,
 
-        rz: 0,
+      rz: 0,
 
-        duration:
-          1.35,
+      duration: 1.35,
 
-        ease:
-          "elastic.out(1, 0.65)",
-      }
-    )
+      ease: "elastic.out(1, 0.65)",
+    })
   }
 
   /*
@@ -439,34 +294,24 @@ wrapper.scale.setScalar(scale)
    */
 
   invalidate = () => {
-    if (
-      this.#funkytl
-    ) {
+    if (this.#funkytl) {
       this.#funkytl.kill()
     }
 
-    if (!this.food)
-      return
+    if (!this.food) return
 
-    gsap.to(
-      this.food.a,
-      {
-        ry: 0,
+    gsap.to(this.food.a, {
+      ry: 0,
 
-        rz: 0,
+      rz: 0,
 
-        centerScale:
-          0,
+      centerScale: 0,
 
-        centerLift:
-          0,
+      centerLift: 0,
 
-        duration:
-          0.9,
+      duration: 0.9,
 
-        ease:
-          "expo.out",
-      }
-    )
+      ease: "expo.out",
+    })
   }
 }

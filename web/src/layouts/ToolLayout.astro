@@ -11,6 +11,7 @@ const { title, description } = Astro.props
 const canonical = Astro.site
   ? new URL(Astro.url.pathname, Astro.site)
   : undefined
+const audioTools = getPanelTools("audio")
 ---
 
 <!doctype html>
@@ -19,40 +20,55 @@ const canonical = Astro.site
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
+    <meta name="theme-color" content="#07080b" />
+    <meta name="color-scheme" content="dark" />
     <title>{title}</title>
     <link rel="icon" type="image/svg+xml" href="/favicon_svg.svg" />
     {canonical && <link rel="canonical" href={canonical} />}
     {Astro.site && <link rel="sitemap" href="/sitemap-index.xml" />}
   </head>
   <body class="tools-site">
+    <a class="skip-link" href="#tool-content">Skip to tool</a>
     <div class="page-shell">
       <div class="grain" aria-hidden="true"></div>
       <div class="ambient ambient-one" aria-hidden="true"></div>
       <div class="ambient ambient-two" aria-hidden="true"></div>
       <header class="topbar">
-        <a class="brand" href="/" aria-label="Crawlers home"
-          ><Svgg name="logo" /></a
-        >
+        <a class="brand" href="/" aria-label="Crawlers home">
+          <Svgg name="logo" />
+        </a>
         <nav aria-label="Tools navigation">
           <details class="dropdown">
-            <summary>Audio Tools <span aria-hidden="true">⌄</span></summary>
+            <summary>
+              <span>Browse audio</span>
+              <span class="dropdown-count"
+                >{String(audioTools.length).padStart(2, "0")}</span
+              >
+              <span class="dropdown-chevron" aria-hidden="true">⌄</span>
+            </summary>
             <div class="dropdown-content">
               {
-                getPanelTools("audio").map(tool => (
-                  <a href={tool.href}>{tool.name}</a>
+                audioTools.map((tool, index) => (
+                  <a href={tool.href}>
+                    <span>{String(index + 1).padStart(2, "0")}</span>
+                    <span>{tool.name}</span>
+                    <span aria-hidden="true">↗</span>
+                  </a>
                 ))
               }
             </div>
           </details>
         </nav>
-        <a class="header-note" href="/">All tools ↗</a>
+        <a class="header-note" href="/">
+          <span>Back to hub</span>
+          <span aria-hidden="true">↗</span>
+        </a>
       </header>
-      <main><slot /></main>
+      <main id="tool-content"><slot /></main>
       <footer>
-        <span>© {new Date().getFullYear()} Crawlers</span><span
-          class="footer-wave"
-          aria-hidden="true">· · ━ · ━━ · ━ · ·</span
-        ><span>Audio stays on your device</span>
+        <span>© {new Date().getFullYear()} Crawlers</span>
+        <span class="footer-wave" aria-hidden="true">· · ━ · ━━ · ━ · ·</span>
+        <span>Private browser processing</span>
       </footer>
     </div>
   </body>

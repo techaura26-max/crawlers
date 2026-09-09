@@ -12,11 +12,7 @@ export class Scene extends THREE_Scene {
   }
 
   async load() {
-    const t = performance.now()
-
     this.assets = await loadAssets()
-
-    console.log("(ms):::", performance.now() - t, this.assets)
 
     this.environment = this.assets.hdr_world
     this.environmentIntensity = 1

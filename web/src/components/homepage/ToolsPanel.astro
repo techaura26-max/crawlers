@@ -18,10 +18,17 @@ import { getPanelTools } from "../../tools/registry"
     aria-modal="true"
     aria-label="Tools"
   >
+    <div class="tools-drawer-grid" aria-hidden="true"></div>
     <div class="tools-sheet-handle" aria-hidden="true"></div>
 
     <header class="tools-panel-header">
-      <p class="tools-panel-label">CRAWLERS / TOOL INDEX</p>
+      <div class="tools-panel-brand">
+        <span class="tools-panel-brand-mark" aria-hidden="true">C/</span>
+        <span>
+          <strong>Tool index</strong>
+          <small>Pick a collection</small>
+        </span>
+      </div>
       <button
         type="button"
         data-tools-close
@@ -33,41 +40,93 @@ import { getPanelTools } from "../../tools/registry"
       </button>
     </header>
 
-    <div class="tools-panel-content">
+    <nav class="tools-panel-tabs" aria-label="Tool categories" role="tablist">
       {
         SLIDER_FOOD.map((section, sectionIndex) => (
-          <div data-tools-view data-section-index={sectionIndex} hidden>
-            <p class="tools-section-number">
-              {String(sectionIndex + 1).padStart(2, "0")} / {section.name}
-            </p>
-            <h2
-              id={`tools-panel-title-${sectionIndex}`}
-              class="tools-section-title"
-            >
-              {section.copy.name}
-            </h2>
-
-            {getPanelTools(section.category).length === 0 && (
-              <p class="tools-empty">Tools are on the way.</p>
-            )}
-            <ul class="tools-list">
-              {getPanelTools(section.category).map((tool, toolIndex) => (
-                <li style={`--tool-index: ${toolIndex}`}>
-                  <a href={tool.href} class="tools-link">
-                    <span class="tools-link-number">
-                      {String(toolIndex + 1).padStart(2, "0")}
-                    </span>
-                    <span class="tools-link-name">{tool.name}</span>
-                    <span class="tools-link-arrow" aria-hidden="true">
-                      →
-                    </span>
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <button
+            type="button"
+            id={`tools-tab-${sectionIndex}`}
+            data-tools-switch
+            data-section-index={sectionIndex}
+            role="tab"
+            aria-controls={`tools-view-${sectionIndex}`}
+            aria-selected={sectionIndex === 0 ? "true" : "false"}
+            tabindex={sectionIndex === 0 ? 0 : -1}
+            class:list={sectionIndex === 0 && "active"}
+          >
+            <span>{String(sectionIndex + 1).padStart(2, "0")}</span>
+            <span>{section.shortName}</span>
+          </button>
         ))
       }
+    </nav>
+
+    <div class="tools-panel-content">
+      {
+        SLIDER_FOOD.map((section, sectionIndex) => {
+          const panelTools = getPanelTools(section.category)
+          return (
+            <section
+              id={`tools-view-${sectionIndex}`}
+              data-tools-view
+              data-section-index={sectionIndex}
+              role="tabpanel"
+              aria-labelledby={`tools-tab-${sectionIndex}`}
+              style={`--section-accent: ${section.accent}; --section-rgb: ${section.accentRgb};`}
+              hidden
+            >
+              <div class="tools-section-meta">
+                <p>
+                  Collection {String(sectionIndex + 1).padStart(2, "0")} /{" "}
+                  {String(SLIDER_FOOD.length).padStart(2, "0")}
+                </p>
+                <p>{String(panelTools.length).padStart(2, "0")} tools</p>
+              </div>
+              <h2
+                id={`tools-panel-title-${sectionIndex}`}
+                class="tools-section-title"
+              >
+                {section.copy.name}
+              </h2>
+              <p class="tools-section-description">
+                {section.copy.description}
+              </p>
+
+              {panelTools.length === 0 ? (
+                <div class="tools-empty">
+                  <span class="tools-empty-status">In development</span>
+                  <p>This collection is being crafted. Check back soon.</p>
+                </div>
+              ) : (
+                <ul class="tools-list">
+                  {panelTools.map((tool, toolIndex) => (
+                    <li style={`--tool-index: ${toolIndex}`}>
+                      <a href={tool.href} class="tools-link">
+                        <span class="tools-link-number">
+                          {String(toolIndex + 1).padStart(2, "0")}
+                        </span>
+                        <span class="tools-link-copy">
+                          <strong>{tool.name}</strong>
+                          <small>{tool.description}</small>
+                        </span>
+                        <span class="tools-link-action" aria-hidden="true">
+                          <span>Open</span>
+                          <span>↗</span>
+                        </span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </section>
+          )
+        })
+      }
     </div>
+
+    <footer class="tools-panel-footer">
+      <span>CRAWLERS® / DIGITAL WORKSHOP</span>
+      <span>EST. 2026</span>
+    </footer>
   </aside>
 </div>

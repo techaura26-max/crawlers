@@ -1,35 +1,43 @@
 ---
 import Svgg from "~/components/svg/Svgg.astro"
 import { SLIDER_FOOD } from "../../../homepage/categories"
-
 import ToolsPanel from "../../homepage/ToolsPanel.astro"
+import "../../../homepage/home.css"
 import "../../../homepage/tools-panel.css"
 
 const SLIDES = Array.from({ length: SLIDER_FOOD.length }, (_, i) => i)
+const firstSlide = SLIDER_FOOD[0]
+const totalSlides = String(SLIDER_FOOD.length).padStart(2, "0")
 ---
 
 <section
-  class="gap-lg relative flex h-full w-full flex-col justify-center py-4
-         [--slide-w:72vw]
-         sm:[--slide-w:60vw]
-         md:[--slide-w:44vw]
-         lg:[--slide-w:clamp(18rem,25vw,30rem)]"
+  class="home-experience"
   data-module="fslider"
   data-panel-open="false"
+  data-active-index="0"
+  style={`--active-accent: ${firstSlide.accent}; --active-rgb: ${firstSlide.accentRgb};`}
 >
-  <!-- slider -->
-  <div class="w-full overflow-clip">
-    <ul
-      data-slider="wrapper"
-      class="ml-[calc((50vw-var(--slide-w)/2)-2rem)] flex text-[.8em]"
-    >
+  <div class="experience-atmosphere" aria-hidden="true">
+    <div class="experience-glow"></div>
+    <div class="experience-orbit experience-orbit-one"></div>
+    <div class="experience-orbit experience-orbit-two"></div>
+    <div class="experience-scanline"></div>
+  </div>
+
+  <div class="experience-rail" aria-hidden="true">
+    <span class="experience-rail-line"></span>
+    <span>CURATED DIGITAL UTILITIES</span>
+    <span class="experience-rail-line"></span>
+  </div>
+
+  <div class="slider-viewport">
+    <ul data-slider="wrapper" class="slider-track">
       {
         SLIDER_FOOD.map((slide, i) => (
           <li
-            class:list={[
-              "z-2 relative flex shrink-0 flex-col gap-2 px-[0.75rem] sm:px-[1.25rem] lg:px-[2rem]",
-              i === 0 && "active",
-            ]}
+            data-slider-item
+            data-section-index={i}
+            class:list={["slider-item", i === 0 && "active"]}
           >
             <button
               type="button"
@@ -40,21 +48,29 @@ const SLIDES = Array.from({ length: SLIDER_FOOD.length }, (_, i) => i)
               aria-expanded="false"
               aria-haspopup="dialog"
               aria-label={`Open ${slide.copy.name}`}
-              class="tools-trigger relative z-10 block aspect-[4/4.5] w-[var(--slide-w)] appearance-none border-0 bg-transparent p-0 text-white md:aspect-[4/5.5]"
+              aria-current={i === 0 ? "true" : undefined}
+              class="tools-trigger"
             >
-              <span class="sr-only">Open {slide.copy.name}</span>
+              <span class="model-frame" aria-hidden="true">
+                <>
+                  <span />
+                  <span />
+                  <span />
+                  <span />
+                </>
+              </span>
               <span class="tools-trigger-label" aria-hidden="true">
-                Explore <span>↗</span>
+                <span>Open collection</span>
+                <span>↗</span>
               </span>
             </button>
 
-            {/* centered slide name */}
-            <div class="flex justify-center px-2">
-              <h2
-                data-module="text"
-                data-type="chars"
-                class="text-center text-xl font-semibold uppercase tracking-tighter"
-              >
+            <div class="slide-caption">
+              <p class="slide-kicker">
+                <span>{String(i + 1).padStart(2, "0")}</span>
+                <span>{slide.shortName}</span>
+              </p>
+              <h2 data-module="text" data-type="chars" class="slide-title">
                 {slide.copy.name}
               </h2>
             </div>
@@ -64,47 +80,54 @@ const SLIDES = Array.from({ length: SLIDER_FOOD.length }, (_, i) => i)
     </ul>
   </div>
 
-<!-- bottom ui -->
-<div
-  data-no-cursor
-  class="fixed inset-x-0 bottom-[max(1rem,env(safe-area-inset-bottom))] z-30 flex justify-center -outline-offset-1"
->
-    <div data-slider="controls" class="flex flex-col gap-2">
-      <ul class="flex gap-[1rem]">
+  <div class="active-brief" aria-live="polite" aria-atomic="true">
+    <p class="active-brief-index">
+      <span data-active-index>01</span>
+      <span>/</span>
+      <span>{totalSlides}</span>
+    </p>
+    <p data-active-description>{firstSlide.copy.description}</p>
+  </div>
+
+  <p class="gesture-note" aria-hidden="true">
+    <span class="gesture-line"></span>
+    Hold + drag to explore
+  </p>
+
+  <div data-no-cursor class="slider-navigation">
+    <ul data-slider="arrows" class="slider-arrows">
+      <li data-module="alpha" data-delay=".5">
+        <button class="slider-arrow" aria-label="Previous category">
+          <span class="rotate-180"><Svgg name="arrow-r" /></span>
+        </button>
+      </li>
+      <li data-module="alpha" data-delay=".7">
+        <button class="slider-arrow" aria-label="Next category">
+          <span><Svgg name="arrow-r" /></span>
+        </button>
+      </li>
+    </ul>
+
+    <div data-slider="controls" class="slider-dots-wrap">
+      <ul class="slider-dots" aria-label="Choose a category">
         {
           SLIDES.map((slide, i) => (
             <li
               data-module="alpha"
-              data-delay={1 + i * 0.2}
+              data-delay={1 + i * 0.12}
               class:list={i === 0 && "active"}
             >
-              <button aria-label={`slide number ${slide}`}>
-                <div class="aspect-square size-[.4rem] w-full rounded-full outline outline-white" />
+              <button
+                aria-label={`Go to category ${slide + 1}: ${SLIDER_FOOD[i].copy.name}`}
+                aria-current={i === 0 ? "true" : undefined}
+              >
+                <span />
               </button>
             </li>
           ))
         }
       </ul>
     </div>
-
-    <ul
-  data-slider="arrows"
-  class="px-gx pointer-events-none absolute inset-0 z-10 flex items-center justify-between gap-12"
->
-      <li data-module="alpha" data-delay=".5">
-        <button class="pointer-events-auto" aria-label="previous slide">
-          <div class="rotate-180">
-            <Svgg name="arrow-r" />
-          </div>
-        </button>
-      </li>
-
-      <li data-module="alpha" data-delay=".7">
-        <button class="pointer-events-auto" aria-label="next slide">
-          <Svgg name="arrow-r" />
-        </button>
-      </li>
-    </ul>
   </div>
 
   <ToolsPanel />

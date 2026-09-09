@@ -9,6 +9,8 @@ import Css from "../components/Css.astro"
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#070707" />
+    <meta name="color-scheme" content="dark" />
     <link rel="icon" type="image/svg+xml" href="/favicon_svg.svg" />
     <title>Crawlers — Tools Hub</title>
     <meta
@@ -18,7 +20,7 @@ import Css from "../components/Css.astro"
     {Astro.site && <link rel="sitemap" href="/sitemap-index.xml" />}
     <Css />
   </head>
-  <body>
+  <body class="home-site">
     <Nav />
     <main class="w-screen overflow-clip"><slot /></main>
     <Script />

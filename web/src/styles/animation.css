@@ -15,3 +15,13 @@
 [data-module="text"] {
   visibility: hidden;
 }
+
+@media (prefers-reduced-motion: reduce) {
+  [data-module="alpha"],
+  [data-module="text"],
+  [data-module="text"] > span,
+  [data-module="logo"] svg g {
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+}

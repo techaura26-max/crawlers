@@ -1,6 +1,11 @@
 .intro {
+  position: relative;
+  max-width: 54rem;
+  margin-right: auto;
   text-align: center;
-  margin-bottom: 38px;
+  margin-bottom: 2.5rem;
+  margin-left: auto;
+  animation: intro-in 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .eyebrow {
@@ -12,6 +17,8 @@
   font-size: 0.72rem;
   font-weight: 800;
   letter-spacing: 0.15em;
+  font-family: "Geist Mono", monospace;
+  text-transform: uppercase;
 }
 
 .eyebrow > span:not(.tiny-arrow) {
@@ -26,19 +33,19 @@
   font-size: 0.85rem;
 }
 
-h1 {
+.audio-converter .intro h1 {
   margin: 0;
-  font-size: clamp(2.7rem, 6.5vw, 5.3rem);
-  line-height: 0.96;
+  font-size: clamp(3rem, 6.5vw, 5.55rem);
+  line-height: 0.92;
   letter-spacing: -0.065em;
-  font-weight: 820;
+  font-weight: 600;
 }
 
-h1 em {
+.audio-converter .intro h1 em {
   position: relative;
   color: transparent;
   font-family: Georgia, serif;
-  font-weight: 500;
+  font-weight: 400;
   background: linear-gradient(
     100deg,
     var(--blue-soft),
@@ -50,7 +57,8 @@ h1 em {
 }
 
 .intro p {
-  margin: 22px auto 0;
+  max-width: 35rem;
+  margin: 1.4rem auto 0;
   color: var(--muted);
   font-size: 1rem;
   line-height: 1.65;
@@ -58,9 +66,9 @@ h1 em {
 
 .converter-card {
   position: relative;
-  padding: 28px;
-  border: 1px solid var(--line);
-  border-radius: 28px;
+  padding: 1.8rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 1.75rem;
   background: linear-gradient(
     140deg,
     rgba(21, 28, 54, 0.9),
@@ -71,6 +79,7 @@ h1 em {
     0 35px 100px rgba(0, 0, 0, 0.42),
     inset 0 1px 0 rgba(255, 255, 255, 0.06);
   backdrop-filter: blur(20px);
+  animation: converter-in 0.85s 0.08s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .converter-card::before {
@@ -80,6 +89,24 @@ h1 em {
   width: 3px;
   border-radius: 28px 0 0 28px;
   background: linear-gradient(var(--blue), var(--lime));
+}
+
+.converter-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0.035),
+    transparent 30%
+  );
+  pointer-events: none;
+}
+
+.converter-card > * {
+  position: relative;
+  z-index: 1;
 }
 
 .card-topline,
@@ -108,6 +135,9 @@ h1 em {
 }
 
 .status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
   padding: 6px 10px;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 999px;
@@ -116,6 +146,24 @@ h1 em {
   font-size: 0.7rem;
   font-weight: 750;
   text-transform: uppercase;
+}
+
+.status-pill i {
+  width: 0.38rem;
+  height: 0.38rem;
+  border-radius: 50%;
+  background: var(--blue);
+  box-shadow: 0 0 0.75rem rgba(var(--blue-rgb), 0.55);
+}
+
+.converter-card[data-status="done"] .status-pill i {
+  background: var(--lime);
+  box-shadow: 0 0 0.75rem rgba(215, 255, 95, 0.55);
+}
+
+.converter-card[data-status="loading"] .status-pill i,
+.converter-card[data-status="converting"] .status-pill i {
+  animation: status-pulse 1.1s ease-in-out infinite;
 }
 
 .format-row {
@@ -138,13 +186,21 @@ h1 em {
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.035);
   cursor: pointer;
-  transition: all 180ms ease;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.025);
+  transition:
+    transform 220ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 220ms ease,
+    background-color 220ms ease,
+    box-shadow 220ms ease;
 }
 
 .format-box:hover {
   transform: translateY(-2px);
   border-color: rgba(136, 160, 255, 0.42);
   background: rgba(92, 124, 255, 0.07);
+  box-shadow:
+    0 0.75rem 2rem rgba(0, 0, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 .active-format {
@@ -244,12 +300,35 @@ h1 em {
     ),
     rgba(6, 9, 18, 0.33);
   cursor: pointer;
-  transition: all 180ms ease;
+  transition:
+    transform 220ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 220ms ease,
+    background-color 220ms ease,
+    box-shadow 220ms ease;
 }
 
 .drop-zone:hover {
   transform: translateY(-2px);
   border-color: rgba(204, 255, 92, 0.52);
+}
+
+.drop-zone.has-file {
+  border-style: solid;
+  border-color: rgba(215, 255, 95, 0.46);
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(215, 255, 95, 0.11),
+      transparent 54%
+    ),
+    rgba(7, 11, 16, 0.48);
+  box-shadow: inset 0 0 0 1px rgba(215, 255, 95, 0.035);
+}
+
+.drop-zone.has-file .upload-icon {
+  border-color: rgba(215, 255, 95, 0.35);
+  color: #0a0c10;
+  background: var(--lime);
 }
 
 .drop-zone input {
@@ -298,6 +377,8 @@ h1 em {
 }
 
 .convert-button {
+  position: relative;
+  overflow: hidden;
   width: 100%;
   min-height: 58px;
   margin-top: 16px;
@@ -309,15 +390,44 @@ h1 em {
   border-radius: 16px;
   color: #0b0e15;
   background: linear-gradient(95deg, var(--lime), #e8ffaf 52%, #bdcbff);
-  font-weight: 820;
+  font-weight: 600;
   cursor: pointer;
   box-shadow: 0 12px 34px rgba(204, 255, 92, 0.13);
-  transition: all 180ms ease;
+  transition:
+    transform 220ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 220ms ease;
+}
+
+.convert-button::before {
+  content: "";
+  position: absolute;
+  top: -80%;
+  bottom: -80%;
+  left: -30%;
+  width: 20%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.65),
+    transparent
+  );
+  transform: rotate(18deg) translateX(-260%);
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.convert-button > span {
+  position: relative;
+  z-index: 1;
 }
 
 .convert-button:hover {
   transform: translateY(-2px);
   box-shadow: 0 16px 42px rgba(204, 255, 92, 0.2);
+}
+
+.convert-button:hover::before,
+.convert-button:focus-visible::before {
+  transform: rotate(18deg) translateX(850%);
 }
 
 .button-arrow {
@@ -343,6 +453,18 @@ h1 em {
   display: inline-flex;
   align-items: center;
   gap: 6px;
+}
+
+.trust-row span::before {
+  content: "✓";
+  display: grid;
+  width: 1rem;
+  height: 1rem;
+  place-items: center;
+  border: 1px solid rgba(215, 255, 95, 0.28);
+  border-radius: 50%;
+  color: var(--lime);
+  font-size: 0.58rem;
 }
 
 .trust-row svg {
@@ -632,14 +754,60 @@ progress {
   cursor: pointer;
 }
 .simple-toast.success {
-  background: #12644c;
+  border: 1px solid rgba(215, 255, 95, 0.26);
+  color: #efffc8;
+  background: rgba(28, 69, 47, 0.96);
 }
 .simple-toast.error {
-  background: #9b2635;
+  border: 1px solid rgba(255, 125, 145, 0.28);
+  background: rgba(116, 28, 42, 0.96);
+}
+
+@keyframes intro-in {
+  from {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes converter-in {
+  from {
+    opacity: 0;
+    transform: translateY(1.25rem) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes status-pulse {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: scale(0.78);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 @media (max-width: 720px) {
   .converter-card {
     padding: 20px;
+  }
+
+  .audio-converter .intro h1 {
+    font-size: clamp(2.55rem, 13vw, 4rem);
+  }
+
+  .intro p {
+    max-width: 28rem;
+    font-size: 0.94rem;
   }
   .modal-header {
     padding: 20px;
@@ -661,7 +829,8 @@ progress {
 }
 @media (prefers-reduced-motion: reduce) {
   .audio-converter *,
-  .audio-converter *::before {
+  .audio-converter *::before,
+  .audio-converter *::after {
     animation: none !important;
     transition: none !important;
   }

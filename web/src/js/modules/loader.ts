@@ -23,17 +23,25 @@ export class Loader {
 
     gsap.to(this.svg, {
       scale: 0,
-      duration: 0.8,
+      opacity: 0,
+      duration: 0.65,
       delay: 0.2,
+      ease: "power2.inOut",
+    })
+
+    gsap.to(this.element.querySelector("[data-loader-copy]"), {
+      y: -12,
+      opacity: 0,
+      duration: 0.55,
+      delay: 0.18,
       ease: "power2.inOut",
     })
 
     gsap.to(this.element, {
       autoAlpha: 0,
-      scale: 0,
-      duration: 0.2,
-      delay: 0.4,
-      ease: "expo.out",
+      duration: 0.7,
+      delay: 0.45,
+      ease: "power2.inOut",
       onComplete: () => {
         this.element.remove()
       },

@@ -15,7 +15,12 @@
       cursor-circle-w
       class="absolute flex size-[1px] items-center justify-center"
     >
-      <div cursor-circle class="absolute size-[1.2rem] rounded-full outline">
+      <div
+        cursor-circle
+        class="absolute grid size-[1.2rem] place-items-center rounded-full outline"
+      >
+        <span cursor-open>OPEN</span>
+        <span cursor-drag>DRAG</span>
       </div>
     </div>
   </div>
@@ -55,7 +60,7 @@
     transition: opacity 0.2s;
   }
 
-  .mouse-out [data-module="cursor"] {
+  body.mouse-out [data-module="cursor"] {
     opacity: 0;
   }
 
@@ -67,7 +72,7 @@
   }
 
   /* down/up */
-  .mouse-down [data-module="cursor"] [cursor-main] {
+  body.mouse-down [data-module="cursor"] [cursor-main] {
     transform: scale(0.8);
     border-radius: 100%;
   }
@@ -90,11 +95,57 @@
   }
 
   [cursor-circle] {
-    transition: transform 0.4s;
+    color: rgba(255, 255, 255, 0.72);
+    outline-color: rgba(255, 255, 255, 0.5);
+    background: rgba(7, 7, 7, 0.16);
+    backdrop-filter: blur(2px);
+    transition:
+      width 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+      height 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+      color 0.3s ease,
+      outline-color 0.3s ease,
+      background-color 0.3s ease,
+      transform 0.4s;
     transform: scale(1);
   }
 
-  .mouse-down [cursor-circle] {
-    transform: scale(1.2);
+  [cursor-circle] span {
+    position: absolute;
+    font-family: "Geist Mono", monospace;
+    font-size: 0.48rem;
+    letter-spacing: 0.12em;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  body:has([data-tools-trigger]:hover) [cursor-circle] {
+    width: 3.65rem;
+    height: 3.65rem;
+    color: #070707;
+    outline-color: var(--active-accent);
+    background: var(--active-accent);
+  }
+
+  body:has([data-tools-trigger]:hover):not(.mouse-dragging) [cursor-open] {
+    opacity: 1;
+  }
+
+  body.mouse-dragging:has([data-module="fslider"]:hover) [cursor-drag] {
+    opacity: 1;
+  }
+
+  body.mouse-dragging:has([data-module="fslider"]:hover) [cursor-open] {
+    opacity: 0;
+  }
+
+  body.mouse-down [cursor-circle] {
+    transform: scale(0.88);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-module="cursor"] *,
+    [data-module="cursor"] {
+      transition-duration: 0.01ms !important;
+    }
   }
 </style>

@@ -95,7 +95,8 @@ export default function AudioConverter({ initialFrom, initialTo }: Props) {
   useEffect(() => {
     const onPopState = () => {
       const tool = getToolByPath(window.location.pathname)
-      if (tool?.component !== "audio/AudioTool" || !tool.props) return
+      if (tool?.component !== "audio/audio_converter/AudioTool" || !tool.props)
+        return
       reset()
       setSelecting(null)
       setPair({ from: String(tool.props.from), to: String(tool.props.to) })
@@ -247,12 +248,19 @@ export default function AudioConverter({ initialFrom, initialTo }: Props) {
           Move from {from.ext} to {to.ext} with one clean, focused tool.
         </p>
       </section>
-      <section className="converter-card" aria-label="Audio converter">
+      <section
+        className="converter-card"
+        aria-label="Audio converter"
+        aria-busy={busy}
+        data-status={status}
+      >
         <div className="card-topline">
           <div className="step-label">
-            <span>01</span> Choose your conversion
+            <span>{file ? "02" : "01"}</span>{" "}
+            {file ? "Ready to convert" : "Choose your conversion"}
           </div>
           <span className="status-pill" role="status">
+            <i aria-hidden="true"></i>
             {status === "loading"
               ? "Loading engine…"
               : busy
@@ -289,7 +297,7 @@ export default function AudioConverter({ initialFrom, initialTo }: Props) {
           {formatButton("to", to)}
         </div>
         <label
-          className={`drop-zone ${dragging ? "dragging" : ""}`}
+          className={`drop-zone ${dragging ? "dragging" : ""} ${file ? "has-file" : ""}`}
           onDragOver={event => {
             event.preventDefault()
             if (!busy) setDragging(true)

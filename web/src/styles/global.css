@@ -100,6 +100,8 @@ html {
     This value is controlled by the slider.
   */
   --grid-drag-x: 0px;
+  --active-accent: #d7ff5f;
+  --active-rgb: 215, 255, 95;
 
   background: #070707;
 }
@@ -131,6 +133,22 @@ body {
   color: #fff;
 }
 
+.home-site {
+  min-height: 100svh;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      circle at 50% 38%,
+      rgba(255, 255, 255, 0.018),
+      transparent 32%
+    ),
+    #070707;
+}
+
+.home-hero {
+  width: 100%;
+}
+
 /* ------------------------------------------------ */
 /* INFINITE 3D GRID */
 /* ------------------------------------------------ */
@@ -151,15 +169,8 @@ body::before {
   z-index: -2;
 
   background-image:
-    linear-gradient(
-      rgba(255, 255, 255, 0.075) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      90deg,
-      rgba(255, 255, 255, 0.075) 1px,
-      transparent 1px
-    );
+    linear-gradient(rgba(var(--active-rgb), 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
 
   background-size: 58px 58px;
 
@@ -172,10 +183,7 @@ body::before {
 
   transform-origin: center top;
 
-  transform:
-    perspective(700px)
-    rotateX(63deg)
-    translateY(-8%);
+  transform: perspective(700px) rotateX(63deg) translateY(-8%);
 
   -webkit-mask-image: linear-gradient(
     to bottom,
@@ -218,25 +226,25 @@ body::after {
   background:
     radial-gradient(
       ellipse at 50% 44%,
-      rgba(255, 255, 255, 0.035) 0%,
-      transparent 38%
+      rgba(var(--active-rgb), 0.045) 0%,
+      transparent 42%
     ),
-
     radial-gradient(
       ellipse at center,
       transparent 35%,
       rgba(0, 0, 0, 0.18) 62%,
       rgba(0, 0, 0, 0.72) 100%
     ),
-
     linear-gradient(
       to bottom,
       #070707 0%,
-      rgba(7, 7, 7, 0.95) 20%,
-      rgba(7, 7, 7, 0.35) 50%,
-      rgba(7, 7, 7, 0.15) 72%,
+      rgba(7, 7, 7, 0.92) 18%,
+      rgba(7, 7, 7, 0.28) 48%,
+      rgba(7, 7, 7, 0.1) 70%,
       #070707 100%
     );
+
+  transition: background 0.9s ease;
 }
 
 /* ------------------------------------------------ */
@@ -304,6 +312,11 @@ a:hover {
 
 button {
   cursor: pointer;
+}
+
+::selection {
+  color: #070707;
+  background: var(--active-accent);
 }
 
 /** -- SPLITTEXT */

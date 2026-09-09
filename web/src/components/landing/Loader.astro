@@ -1,46 +1,146 @@
 ---
-
+import Svgg from "~/components/svg/Svgg.astro"
 ---
 
-<div
-  data-module="loader"
-  class="absolute inset-0 z-50 flex items-center justify-center"
->
-  <div class="absolute inset-0 flex items-center justify-center">
-    <svg data-percentage viewBox="0 0 100 100" class="absolute w-[3em]">
-      <circle
-        cx="50"
-        cy="50"
-        r="45"
-        fill="none"
-        stroke="currentColor"
-        class="opacity-30"
-        stroke-width="2"></circle>
-      <circle
-        data-circle
-        cx="50"
-        cy="50"
-        r="45"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"></circle>
-    </svg>
+<div data-module="loader" class="site-loader" aria-label="Loading Crawlers">
+  <div class="loader-grid" aria-hidden="true"></div>
+  <div data-loader-copy class="loader-copy">
+    <Svgg name="logo" class="loader-logo" />
+    <p>Preparing the interactive workshop</p>
   </div>
+  <div class="loader-progress" aria-hidden="true">
+    <svg data-percentage viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="45" fill="none" stroke-width="2"></circle>
+      <circle data-circle cx="50" cy="50" r="45" fill="none" stroke-width="2"
+      ></circle>
+    </svg>
+    <span>GL</span>
+  </div>
+  <p class="loader-status" aria-hidden="true">
+    <span>Loading objects</span>
+    <span>01—05</span>
+  </p>
 </div>
 
 <style>
-  [data-module="loader"] {
-    --anim: 2s;
+  .site-loader {
+    position: absolute;
+    inset: 0;
+    z-index: 55;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    color: #fff;
+    background: #050505;
+  }
 
-    pointer-events: none;
-    /* circle percentage */
-    [data-percentage] > circle:nth-child(2) {
-      stroke-dasharray: 282.7433388230814;
-      stroke-dashoffset: calc(282.7433388230814 * 1);
-      transition: stroke-dashoffset 1.2s ease-in-out 0.5s;
+  .loader-grid {
+    position: absolute;
+    inset: 0;
+    opacity: 0.32;
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+    background-size: 4.5rem 4.5rem;
+    mask-image: radial-gradient(circle at center, #000, transparent 72%);
+  }
+
+  .loader-copy {
+    position: relative;
+    display: grid;
+    justify-items: center;
+    gap: 1.25rem;
+    width: min(52vw, 18rem);
+  }
+
+  :global(.loader-logo) {
+    width: 100%;
+    height: auto;
+  }
+
+  .loader-copy p,
+  .loader-status {
+    font-family: "Geist Mono", monospace;
+    text-transform: uppercase;
+  }
+
+  .loader-copy p {
+    color: rgba(255, 255, 255, 0.38);
+    font-size: 0.59rem;
+    letter-spacing: 0.16em;
+  }
+
+  .loader-progress {
+    position: absolute;
+    right: max(1.25rem, var(--gx));
+    bottom: 1.4rem;
+    display: grid;
+    width: 3.1rem;
+    height: 3.1rem;
+    place-items: center;
+  }
+
+  .loader-progress svg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+  }
+
+  .loader-progress circle:first-child {
+    stroke: rgba(255, 255, 255, 0.16);
+  }
+
+  .loader-progress circle:nth-child(2) {
+    stroke: #d7ff5f;
+    stroke-dasharray: 282.7433388230814;
+    stroke-dashoffset: 282.7433388230814;
+    transition: stroke-dashoffset 1.2s ease-in-out 0.5s;
+  }
+
+  .loader-progress span {
+    color: rgba(255, 255, 255, 0.55);
+    font-family: "Geist Mono", monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.06em;
+  }
+
+  .loader-status {
+    position: absolute;
+    right: max(5.25rem, calc(var(--gx) + 4rem));
+    bottom: 2.55rem;
+    display: flex;
+    gap: 0.7rem;
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 0.57rem;
+    letter-spacing: 0.13em;
+  }
+
+  .loader-status span:last-child {
+    color: #d7ff5f;
+  }
+
+  @media (max-width: 560px) {
+    .loader-copy {
+      width: min(62vw, 15rem);
     }
 
-    /* squares */
+    .loader-copy p {
+      font-size: 0.53rem;
+      white-space: nowrap;
+    }
+
+    .loader-status {
+      right: auto;
+      bottom: 2.45rem;
+      left: 1.2rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .loader-progress circle:nth-child(2) {
+      transition-duration: 0.01ms;
+    }
   }
 </style>
 
@@ -67,7 +167,6 @@
       window.app.loader.timeouts.push(setTimeout(updateProgress, 1800))
     }
 
-    // Start the progress
     window.app.loader.timeouts.push(
       setTimeout(updateProgress, 900 + Math.random() * 100)
     )

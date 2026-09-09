@@ -4,21 +4,10 @@ import Loader from "@c/landing/Loader.astro"
 ---
 
 <header
-  class="py-sm relative flex min-h-[100svh] flex-col items-center overflow-hidden"
+  class="home-hero relative flex min-h-[100svh] flex-col items-center overflow-hidden"
 >
-  <!-- top content -->
-  <div class="px-gx absolute inset-x-0 top-0 z-10 w-full pt-2">
-    <div class="md:px-grid-3 pt-[5rem] md:pt-0">
-      <h1
-        data-module="text"
-        data-type="chars"
-        class="md:w-grids-2 w-grids-4 text-xs leading-[1em]"
-      >
-      </h1>
-    </div>
-  </div>
+  <h1 class="sr-only">Crawlers interactive tools hub</h1>
 
-  <!-- centered slider -->
   <div class="flex w-full flex-1 items-center justify-center">
     <FoodSlider />
   </div>
